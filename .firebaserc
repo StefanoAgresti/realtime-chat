@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "realtime-chat-9c001": {
+      "hosting": {
+        "realtime-chat": [
+          "realtime-chat-9c001"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "realtime-chat-9c001"
+  }
+}

@@ -94,6 +94,16 @@
             ],
             "scripts": []
           }
+        },
+        "deploy": {
+          "builder": "@angular/fire:deploy",
+          "options": {
+            "prerender": false,
+            "ssr": false,
+            "browserTarget": "realtime-chat:build:production",
+            "firebaseProject": "realtime-chat-9c001",
+            "firebaseHostingSite": "realtime-chat-9c001"
+          }
         }
       }
     }
