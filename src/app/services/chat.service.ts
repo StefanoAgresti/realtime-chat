@@ -9,7 +9,11 @@ import { AngularFireList } from '@angular/fire/compat/database';
 export class ChatService {
   constructor(private authData: AngularFireAuth) {}
 
-  sendMessage(message: string, messagesDbRef: AngularFireList<any>) {
+  sendMessage(
+    message: string,
+    messagesDbRef: AngularFireList<any>,
+    msgTimestamp: String
+  ) {
     this.authData.authState.subscribe((currentUser) => {
       if (currentUser) {
         const user = {
@@ -24,6 +28,7 @@ export class ChatService {
             .push({
               text: message,
               user: user,
+              date: msgTimestamp,
             })
             .then(() => (message = ''))
             .catch((error) => console.log(error));

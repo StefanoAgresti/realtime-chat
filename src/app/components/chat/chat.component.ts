@@ -33,6 +33,12 @@ export class ChatComponent implements OnInit {
   messageUserId: string = '';
   messageKey: string = '';
 
+  //message timestamp
+  msgTimestamp: Date = new Date();
+  msgHours: Number = this.msgTimestamp.getHours();
+  msgMinutes: Number = this.msgTimestamp.getMinutes();
+  messageDateFormatted: String = `${this.msgHours}:${this.msgMinutes}`;
+
   ngOnInit(): void {
     this.messagesDbRef = this.db.list('messages');
     this.messages = this.messagesDbRef
@@ -50,18 +56,24 @@ export class ChatComponent implements OnInit {
     if (this.editMode) {
       this.onUpdate();
     } else {
-      this.chatService.sendMessage(this.messageRef, this.messagesDbRef);
+      this.chatService.sendMessage(
+        this.messageRef,
+        this.messagesDbRef,
+        this.messageDateFormatted
+      );
     }
 
     chatForm.reset();
   }
 
   onDelete(messageKey: string, messageUserId: string) {
-    this.chatService.deleteMessage(
-      messageKey,
-      this.messagesDbRef,
-      messageUserId
-    );
+    if (confirm('Are you sure to delete the message?')) {
+      this.chatService.deleteMessage(
+        messageKey,
+        this.messagesDbRef,
+        messageUserId
+      );
+    }
   }
 
   onToggleEditMode(message: any) {

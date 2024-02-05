@@ -31,14 +31,15 @@ export class AuthService {
       const isUsernameTaken = await this.isUsernameTaken(username);
 
       if (isUsernameTaken) {
-        throw new Error('Username già in uso');
+        throw new Error('Username already taken');
       }
 
       const data = await this.auth.createUserWithEmailAndPassword(
         email,
         password
       );
-      const user = data.user;
+
+      const user = data?.user;
 
       await user
         ?.updateProfile({
@@ -47,16 +48,16 @@ export class AuthService {
         .then(() => {
           console.log(`profilo aggiornato, username: ${user.displayName}`);
         })
-        .catch((error) => {
+        .catch((error: Error) => {
           console.log(error);
         });
 
       return user;
     } catch (error: any) {
       if (error.code === 'auth/email-already-in-use') {
-        throw new Error('Email già in uso ');
+        throw new Error('Email already taken');
       } else {
-        console.error(error);
+        console.error(error.message);
       }
       throw error;
     }
@@ -70,9 +71,9 @@ export class AuthService {
       return user;
     } catch (error: any) {
       if (error.code === 'auth/invalid-login-credentials') {
-        throw new Error('Utente non trovato');
+        throw new Error('User not found. Check your email and password');
       } else {
-        console.error(error);
+        console.error(error.message);
       }
       throw error;
     }
