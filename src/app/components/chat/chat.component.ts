@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { Observable, map } from 'rxjs';
+import { Observable, Subscription, map } from 'rxjs';
 
 import {
   AngularFireDatabase,
@@ -14,19 +14,18 @@ import { AuthService } from 'src/app/services/auth.service';
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.css'],
 })
-export class ChatComponent implements OnInit {
+export class ChatComponent implements OnInit, OnDestroy {
   constructor(
     private chatService: ChatService,
     private db: AngularFireDatabase,
     private authService: AuthService
   ) {}
 
-  messages!: Observable<any>; //messaggi presi da db, trasformati in key,val
-
-  messageRef: any; //ref al 2-way binding nel template
-  messagesDbRef!: AngularFireList<any>; //lista dei messaggi dal db
-
-  user!: any; //variabile a cui assegno utente loggato
+  messages!: Observable<any>; //messages from db transformed in key,val
+  messageRef: any; //2-way binding template ref
+  messagesDbRef!: AngularFireList<any>; //messages list from db
+  user!: any; //logged in user
+  authSub!: Subscription;
 
   //update
   editMode: boolean = false;
@@ -49,7 +48,12 @@ export class ChatComponent implements OnInit {
         )
       );
 
-    this.authService.getCurrentUser().subscribe((user) => (this.user = user));
+    this.authSub = this.authService.getCurrentUser().subscribe((user) => {
+      this.user = user;
+      if (user) {
+        localStorage.setItem('user', JSON.stringify(user));
+      } else return;
+    });
   }
 
   onSubmit(chatForm: NgForm) {
@@ -95,7 +99,16 @@ export class ChatComponent implements OnInit {
     }
   }
 
+  cancelUpdate() {
+    this.messageRef = '';
+    this.editMode = false;
+  }
+
   onLogout() {
     this.authService.logout();
+  }
+
+  ngOnDestroy(): void {
+    this.authSub.unsubscribe();
   }
 }
