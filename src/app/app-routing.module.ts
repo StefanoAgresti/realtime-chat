@@ -3,13 +3,34 @@ import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './components/login/login.component';
 import { SignUpComponent } from './components/sign-up/sign-up.component';
 import { ChatComponent } from './components/chat/chat.component';
-import { isLoggedInGuard } from './guards/is-logged-in.guard';
+
+import {
+  redirectUnauthorizedTo,
+  redirectLoggedInTo,
+  canActivate,
+} from '@angular/fire/compat/auth-guard';
+
+const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['login']);
+
+const redirectLoggedInToChat = () => redirectLoggedInTo(['chat']);
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: '/login' },
-  { path: 'login', component: LoginComponent },
-  { path: 'sign-up', component: SignUpComponent },
-  { path: 'chat', canActivate: [isLoggedInGuard], component: ChatComponent },
+  {
+    path: 'login',
+    ...canActivate(redirectLoggedInToChat),
+    component: LoginComponent,
+  },
+  {
+    path: 'sign-up',
+    ...canActivate(redirectLoggedInToChat),
+    component: SignUpComponent,
+  },
+  {
+    path: 'chat',
+    ...canActivate(redirectUnauthorizedToLogin),
+    component: ChatComponent,
+  },
   { path: '**', redirectTo: '/login' },
 ];
 
