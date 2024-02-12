@@ -1,10 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { AngularFireAuth } from '@angular/fire/compat/auth';
-import {
-  AngularFireList,
-  AngularFireDatabase,
-} from '@angular/fire/compat/database';
+import { AngularFireDatabase } from '@angular/fire/compat/database';
 import { Router } from '@angular/router';
 
 @Injectable({
@@ -23,7 +20,7 @@ export class AuthService {
       .orderByChild('username')
       .equalTo(username)
       .once('value');
-    return snapshot.exists(); // ritorna true se l'username già esiste, altrimenti false
+    return snapshot.exists(); //return true if username already exists, else return false
   }
 
   async signUp(email: string, password: string, username: string) {
@@ -46,7 +43,7 @@ export class AuthService {
           displayName: username,
         })
         .then(() => {
-          console.log(`profilo aggiornato, username: ${user.displayName}`);
+          console.log(`profile updated, username: ${user.displayName}`);
         })
         .catch((error: Error) => {
           console.log(error);
@@ -87,15 +84,6 @@ export class AuthService {
         this.router.navigate(['/login']);
       })
       .catch((err) => console.log(err));
-  }
-
-  userIsLoggedIn() {
-    if (localStorage.getItem('user')) {
-      return true;
-    } else {
-      this.router.navigate(['']);
-      return false;
-    }
   }
 
   getCurrentUser() {

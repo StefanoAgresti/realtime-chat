@@ -35,6 +35,7 @@ export class SignUpComponent implements OnInit {
       .then((user) => {
         console.log(user);
 
+        //email & username stored on db
         this.usersDbRef.set(`${user?.uid}`, {
           email: email,
           username: user?.displayName,
