@@ -3,7 +3,7 @@ module.exports = {
   content: ["./src/**/*.{html,ts}"],
   theme: {
     extend: {
-      maxHeight: {
+      height: {
         160: "40rem",
       },
     },

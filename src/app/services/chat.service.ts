@@ -12,7 +12,7 @@ export class ChatService {
   sendMessage(
     message: string,
     messagesDbRef: AngularFireList<any>,
-    msgTimestamp: String
+    msgCreatedAt: string
   ) {
     this.authData.authState.subscribe((currentUser) => {
       if (currentUser) {
@@ -28,9 +28,11 @@ export class ChatService {
             .push({
               text: message,
               user: user,
-              date: msgTimestamp,
+              createdAt: msgCreatedAt,
             })
-            .then(() => (message = ''))
+            .then(() => {
+              message = '';
+            })
             .catch((error) => console.log(error));
         }
       }
@@ -56,14 +58,18 @@ export class ChatService {
     messageKey: string,
     messagesDbRef: AngularFireList<any>,
     messageUserId: string,
-    updatedText: string
+    updatedText: string,
+    msgUpdatedAt: string
   ) {
     this.authData.authState.subscribe((currentUser) => {
       if (currentUser) {
         if (currentUser.uid === messageUserId) {
           if (updatedText.trim() !== '') {
             messagesDbRef
-              .update(messageKey, { text: updatedText })
+              .update(messageKey, {
+                text: updatedText,
+                updatedAt: msgUpdatedAt,
+              })
               .then(() => {
                 updatedText = '';
               })

@@ -32,12 +32,6 @@ export class ChatComponent implements OnInit, OnDestroy {
   messageUserId: string = '';
   messageKey: string = '';
 
-  //message timestamp
-  msgTimestamp: Date = new Date();
-  msgHours: Number = this.msgTimestamp.getHours();
-  msgMinutes: Number = this.msgTimestamp.getMinutes();
-  messageDateFormatted: String = `${this.msgHours}:${this.msgMinutes}`;
-
   ngOnInit(): void {
     this.messagesDbRef = this.db.list('messages');
     this.messages = this.messagesDbRef
@@ -57,16 +51,21 @@ export class ChatComponent implements OnInit, OnDestroy {
   }
 
   onSubmit(chatForm: NgForm) {
+    let date: Date = new Date();
+    let createdAt: string = date.toLocaleTimeString([], {
+      hour: '2-digit',
+      minute: '2-digit',
+    });
+
     if (this.editMode) {
       this.onUpdate();
     } else {
       this.chatService.sendMessage(
         this.messageRef,
         this.messagesDbRef,
-        this.messageDateFormatted
+        createdAt
       );
     }
-
     chatForm.reset();
   }
 
@@ -88,12 +87,19 @@ export class ChatComponent implements OnInit, OnDestroy {
   }
 
   onUpdate() {
+    let date: Date = new Date();
+    let updatedAt: string = date.toLocaleTimeString([], {
+      hour: '2-digit',
+      minute: '2-digit',
+    });
+
     if (this.messageRef.trim() !== '') {
       this.chatService.updateMessage(
         this.messageKey,
         this.messagesDbRef,
         this.messageUserId,
-        this.messageRef
+        this.messageRef,
+        updatedAt
       );
       this.editMode = false;
     }
