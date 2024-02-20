@@ -43,10 +43,9 @@ export class ChatComponent implements OnInit, OnDestroy {
       );
 
     this.authSub = this.authService.getCurrentUser().subscribe((user) => {
-      this.user = user;
       if (user) {
-        localStorage.setItem('user', JSON.stringify(user));
-      } else return;
+        this.user = user;
+      } else this.user = null;
     });
   }
 

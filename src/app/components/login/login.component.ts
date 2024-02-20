@@ -24,7 +24,6 @@ export class LoginComponent implements OnInit {
       .signIn(email, password)
       .then((user) => {
         if (user) {
-          localStorage.setItem('user', JSON.stringify(user));
           loginForm.reset();
           this.router.navigate(['/chat']);
         } else {

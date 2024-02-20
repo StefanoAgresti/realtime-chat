@@ -80,7 +80,6 @@ export class AuthService {
     this.auth
       .signOut()
       .then(() => {
-        localStorage.removeItem('user');
         this.router.navigate(['/login']);
       })
       .catch((err) => console.log(err));
