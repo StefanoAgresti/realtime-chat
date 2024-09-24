@@ -1,0 +1,100 @@
+<section class="bg-gray-200">
+  <div
+    class="flex flex-col items-center justify-center px-6 py-8 mx-auto h-screen lg:py-0"
+  >
+    <section
+      *ngIf="error"
+      class="bg-red-200 rounded-xl text-red-800 p-4 w-1/5 text-center m-5"
+    >
+      {{ error.message }}
+    </section>
+    <div class="w-full bg-white rounded-lg md:mt-0 sm:max-w-md xl:p-0">
+      <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
+        <h1
+          class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl"
+        >
+          Create your account
+        </h1>
+        <form
+          #signUpForm="ngForm"
+          (ngSubmit)="onSubmit(signUpForm)"
+          class="space-y-4 md:space-y-6"
+        >
+          <section>
+            <label
+              for="email"
+              class="block mb-2 text-sm font-medium text-gray-900"
+              >Your email</label
+            >
+            <input
+              type="email"
+              name="email"
+              id="email"
+              autocomplete="off"
+              required
+              email
+              ngModel
+              pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$"
+              class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-full p-2.5"
+              placeholder="example@email.com"
+            />
+          </section>
+          <section>
+            <label
+              for="username"
+              class="block mb-2 text-sm font-medium text-gray-900"
+              >Your username</label
+            >
+            <input
+              type="text"
+              name="username"
+              id="username"
+              autocomplete="off"
+              required
+              ngModel
+              class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-full p-2.5"
+              placeholder="Username"
+            />
+          </section>
+          <section>
+            <label
+              for="password"
+              class="block mb-2 text-sm font-medium text-gray-900"
+              >Password</label
+            >
+            <input
+              type="password"
+              name="password"
+              id="password"
+              autocomplete="off"
+              required
+              ngModel
+              placeholder="••••••"
+              minlength="6"
+              class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-full p-2.5"
+            />
+          </section>
+          <button
+            [disabled]="!signUpForm.valid"
+            class="w-full hover:bg-primary-700 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+            [ngClass]="
+              !signUpForm.valid
+                ? ' text-black bg-slate-300 hover:bg-slate-300'
+                : 'bg-blue-600 hover:bg-blue-700 text-white'
+            "
+          >
+            Create an account
+          </button>
+          <p class="text-sm font-light text-gray-500">
+            Already have an account?
+            <a
+              routerLink="/login"
+              class="font-medium text-blue-600 hover:underline"
+              >Login here</a
+            >
+          </p>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
